@@ -47,6 +47,12 @@ jobs:
           name: python-app
           path: ./python-app
 
+      # ✅ Extract the tarball before deploying
+      - name: Extract artifact
+        run: |
+          mkdir extracted
+          tar -xzf ./python-app/output.tar.gz -C extracted || true
+
       - name: Login to Azure
         uses: azure/login@v2
         with:
@@ -60,4 +66,4 @@ jobs:
         with:
           app-name: 'ecommerce-webapp-nd'
           slot-name: 'Production'
-          package: ./python-app   # ✅ deploy actual files, not tar.gz
+          package: ./extracted   # ✅ deploy the extracted folder
