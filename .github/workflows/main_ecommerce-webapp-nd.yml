@@ -22,24 +22,17 @@ jobs:
         with:
           python-version: '3.10'
 
-      # Step 3: Install dependencies (optional, for validation)
+      # Step 3: Install dependencies (optional, for validation only)
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      # Step 4: Login to Azure
-      - name: Login to Azure
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_A66E60BAA7704CA69F1A6E8F1BE55915 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_5482A1BBFAE84647825854A829F59B91 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_23939752EA024BAEB993D70C3DA55E1B }}
-
-      # Step 5: Deploy directly from repo root
+      # Step 4: Deploy directly to Azure Web App using publish profile
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'ecommerce-webapp-nd'
           slot-name: 'Production'
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
           package: .   # ✅ deploy repo root directly
